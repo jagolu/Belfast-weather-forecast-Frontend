@@ -1,0 +1,28 @@
+<div *ngIf="weatherF" class="mt-5">
+  <div class="row">
+    <div class="col-11"><h3>{{cityname}}</h3></div>
+    <div class="col-1"(click)="reload()" *ngIf="!loading">
+      <img  style="width: 110%" src="/bundles/Belfast-weather-forecast-Frontend/assets/reload.png">
+    </div>
+    <div class="col-1"(click)="reload()" *ngIf="loading">
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </div>
+  </div>
+  
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Forecast</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let weather of weatherF.consolidated_weather">
+        <td style="width:33%">{{ weather.applicable_date }}</td>
+        <td>{{weather.weather_state_name}}</td>
+        <td><img src="https://www.metaweather.com/static/img/weather/png/{{weather.weather_state_abbr}}.png" ></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

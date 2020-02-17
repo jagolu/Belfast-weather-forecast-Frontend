@@ -1,0 +1,1 @@
+In that directory should be the angular project for the frontend
