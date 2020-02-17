@@ -7,7 +7,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { WeatherForecastComponent } from './components/weather-forecast/weather-forecast.component';
-import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RegisterComponent } from './components/Identity/register/register.component';
 
@@ -20,7 +19,6 @@ import { ResponseInterceptor } from './interceptors/response.interceptor';
   declarations: [
     AppComponent,
     WeatherForecastComponent,
-    NavbarComponent,
     RegisterComponent,
     LoginComponent
   ],

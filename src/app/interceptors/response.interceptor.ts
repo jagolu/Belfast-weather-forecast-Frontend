@@ -9,21 +9,12 @@ import { tap } from 'rxjs/operators';
 @Injectable()
 export class ResponseInterceptor implements HttpInterceptor {
     constructor(
-        private __router:Router, 
         private __identityS:IdentityService,
     ) { }
-
-
-    //
-    // ──────────────────────────────────────────────────────────────────────────────────
-    //   :::::: P U B L I C   F U N C T I O N S : :  :   :    :     :        :          :
-    // ──────────────────────────────────────────────────────────────────────────────────
-    //
 
     /**
      * Intercept every incoming http responses 
      * 
-     * @access public
      * @param {HttpRequest<any>} req The incoming request
      * @param {HttpHandler} next The http handler
      */
@@ -37,26 +28,15 @@ export class ResponseInterceptor implements HttpInterceptor {
         ));
     }
 
-
-    //
-    // ────────────────────────────────────────────────────────────────────────────────────
-    //   :::::: P R I V A T E   F U N C T I O N S : :  :   :    :     :        :          :
-    // ────────────────────────────────────────────────────────────────────────────────────
-    //
-
-    //
-    // ─── AUTHENTICATION ─────────────────────────────────────────────────────────────
-    //
-
     /**
      * Manage a http response for authenticate
      * 
-     * @access private
      * @param {any} request The response response
      */
     private handleAuthentication(request:any){
         if((request.url.includes("/login"))){
-            this.__identityS.setSession(request.body.access_token);
+            //We save the auth token in the browser memory
+            this.__identityS.setSession(request.body.access_token); 
         }
     }
 }

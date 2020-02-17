@@ -3,7 +3,6 @@ import { LocationModel } from '../../models/allModels';
 import { FetchWeatherService } from './../../services/fetch-weather.service';
 import { Component, OnInit } from '@angular/core';
 import { Locations } from 'src/app/models/allModels';
-import { BackendURL } from 'src/environments/environment';
 
 @Component({
   selector: 'app-weather-forecast',
@@ -14,11 +13,11 @@ import { BackendURL } from 'src/environments/environment';
   ]
 })
 export class WeatherForecastComponent implements OnInit {
-
-  public weatherF:any;
-  public cityname:string;
-  public city :LocationModel = Locations.BELFAST;
-  public loading:Boolean;
+  
+  public weatherF:any; //The array of forecast for the next 5 days
+  public cityname:string; //The name of the city
+  public city :LocationModel = Locations.BELFAST; //By default: Belfast 
+  public loading:Boolean; //To know if it's loading the request 
 
   constructor(private _wfS:FetchWeatherService, private _authS:AuthService) { 
     this.cityname = this.city.name;
@@ -26,16 +25,26 @@ export class WeatherForecastComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._wfS.getWeatherForecast(Locations.BELFAST.numberLocation).subscribe(data=>{
-      this.weatherF = data;
-    });
+    //When the view starts, we get the weather forecast
+    this.getForecast();
   }
 
+  /**
+   * Do the request again to get the weather forecast
+   */
   public reload(){
-    this.loading = true;
+    this.loading = true; //Starts loading
+    this.getForecast(true);
+  }
+
+  /**
+   * Do the request to get the weather forecast
+   * @param {Boolean} stopLoading True if we need to set the loading var to false, false otherwise
+   */
+  private getForecast(stopLoading:Boolean = false){
     this._wfS.getWeatherForecast(Locations.BELFAST.numberLocation).subscribe(data=>{
       this.weatherF = data;
-      this.loading = false;
+      if(stopLoading) this.loading = false;
     });
   }
 }

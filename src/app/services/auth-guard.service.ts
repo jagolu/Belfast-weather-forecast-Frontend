@@ -9,63 +9,33 @@ import { BackendURL } from 'src/environments/environment';
 })
 export class AuthGuardService implements CanActivate{
   
-  //
-  // ──────────────────────────────────────────────────────────────────────
-  //   :::::: C L A S S   V A R S : :  :   :    :     :        :          :
-  // ──────────────────────────────────────────────────────────────────────
-  //
-  
-  /**
-   * The activated url paths
-   * 
-   * @access public
-   * @var {ActivatedRouteSnapshot[]} path
-   */
+  // The activated url paths
   public path: ActivatedRouteSnapshot[];
 
-  /**
-   * The activated url path
-   * 
-   * @access public
-   * @var {ActivatedRouteSnapshot} route
-   */
+  // The activated url path
   public route: ActivatedRouteSnapshot;
 
-
-  //
-  // ──────────────────────────────────────────────────────────────────────────
-  //   :::::: C O N S T R U C T O R S : :  :   :    :     :        :          :
-  // ──────────────────────────────────────────────────────────────────────────
-  //
-
-  /**
-   * @constructor
-   * @param {AuthenticationService} __authService To know if the user is already logged
-   */
   constructor(private _authS:AuthService) { }
 
-
-  //
-  // ──────────────────────────────────────────────────────────────────────────────────
-  //   :::::: P U B L I C   F U N C T I O N S : :  :   :    :     :        :          :
-  // ──────────────────────────────────────────────────────────────────────────────────
-  //
   
   /**
    * Check if an user can access to a especific uri
    * 
-   * @access public
    * @param {ActivatedRouteSnapshot} next The url the user is trying to access
-   * @return {Boolean} True if the user is authenticated, false otherwise
    */
   public canActivate(next:ActivatedRouteSnapshot):Boolean{
     let isAuth = this._authS.IsAuthenticated();
     let needAuth = this.needAuth(next.url.toString());
-    if(!isAuth && needAuth){
+
+    //If the next page needs that user is logged and the user doesn't, 
+    // we send him back to the logIn page
+    if(!isAuth && needAuth){ 
       window.location.href = BackendURL+"Home/LogIn";
       return false;
     }
 
+    //If the next page doesn't need that the user is logged and the user does,
+    // we send him back to the logIn page
     if(isAuth && !needAuth) {
       this._authS.logOut();
       window.location.href = BackendURL+"Home/LogIn";
@@ -73,13 +43,17 @@ export class AuthGuardService implements CanActivate{
     return true;
   }
 
+  /**
+   * To know if the next page need that the user is logged
+   * @param {string} path The path of the next page
+   */
   private needAuth(path:string):Boolean{
     let neededAuth = [
       "WeatherForecast"
   ];
 
   return neededAuth.some(subPath=>
-    path.includes(subPath)
-  );
+      path.includes(subPath)
+    );
   }
 }

@@ -1,29 +1,48 @@
 import { BackendURL } from './../../environments/environment';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 
 export class Rest {
 
+  // The base url of the backend
   private readonly __baseURL : string = BackendURL;
+
   constructor(private __http:HttpClient) { }
 
+    /**
+   * Do a http Post Request
+   * 
+   * @param {Object} body Body of the request
+   * @param {string} path Subpath of the request
+   * @param {Boolean} urlEncoded True if the request needs urlencoded as content-type, false otherwise
+   */
   public postRequest(body:any, path:string, urlEncoded:boolean = false){
     let bodyvar = urlEncoded ? body.toString() : body;
 
     return this.__http.post(this.__baseURL+path, bodyvar,{});
   }
   
+  /**
+   * Do a Http Get Request
+   * 
+   * @param {string} path Path of the request
+   * @param {ParamValue[]} params Url params of the request
+   */
   public getRequest(path:string ,params?:paramValue[]){
     let options = params ? 
       {
         params: this.params(params)
-      } : 
-      {
-      };
+      } : { };
       
     return this.__http.get(this.__baseURL+path,options);
   }
-  
+
+  /**
+   * Parse params to HttpParams
+   * 
+   * @param {paramValue[]} params Params to parse
+   */
+
   private params(params:paramValue[]):HttpParams{
     let urlParams : HttpParams = new HttpParams();
     params.forEach(param => {
@@ -46,17 +65,9 @@ export class Rest {
  * @interface
  */
 interface paramValue{
-  /**
-   * The name of the param
-   * 
-   * @var {string} param 
-   */
+  // The name of the param
   param:string;
 
-  /**
-   * The value of the param
-   * 
-   * @var {string} value
-   */
+  // The value of the param
   value:string;
 }

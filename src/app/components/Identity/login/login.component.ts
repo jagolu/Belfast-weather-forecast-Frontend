@@ -11,52 +11,35 @@ import { BackendURL } from 'src/environments/environment';
 
 export class LoginComponent  {
 
-  public logInForm: FormGroup;
-  public passwordType: string;
-  public passwordsAreEqual: Boolean;
-  public loading:Boolean;
+  public logInForm: FormGroup; //Log in form
+  public loading:Boolean; //To know if the loading the log in post request
 
-
-  //
-  // ──────────────────────────────────────────────────────────────────────────
-  //   :::::: C O N S T R U C T O R S : :  :   :    :     :        :          :
-  // ──────────────────────────────────────────────────────────────────────────
-  //
-
-  /**
-   * @constructor
-   * @param {AuthenticationService} __authenticationS To do the
-   * sign up request 
-   */
   constructor(private _authS:AuthService) {
-    this.passwordsAreEqual = false;
-    this.loading = false;
+    this.loading = false; //At the beginning the passwords aren't the same
 
     this.initializeForm();
   }
 
-
-  //
-  // ──────────────────────────────────────────────────────────────────────────────────
-  //   :::::: P U B L I C   F U N C T I O N S : :  :   :    :     :        :          :
-  // ──────────────────────────────────────────────────────────────────────────────────
-  //
-
+  /**
+   * Do the logIn request
+   */
   public logIn(){ 
-    this.loading = true;
+    this.loading = true; //Start to load the log in request
     this._authS.logIn({
       'email' : this.logInForm.controls['email'].value,
       'password': this.logInForm.controls['password'].value
     }).subscribe(
       _=> {
         setTimeout(_=> this.resetForm(true), 1000);
-        window.location.href = BackendURL+"Home/WeatherForecast";
+        window.location.href = BackendURL+"Home/WeatherForecast"; // We naviagte to the weather forecast page
       },
       _=> this.resetForm(false)
     );
   }
 
-
+  /**
+   * Initializes the form
+   */
   private initializeForm(){
     this.logInForm = new FormGroup({
       'email': new FormControl(
@@ -78,11 +61,15 @@ export class LoginComponent  {
     })
   }
 
+  /**
+   * Cleans the form
+   * @param {Boolean} full True to clean both inputs, false to remove only the password input
+   */
   private resetForm(full:Boolean){
     this.logInForm.reset({
       'email': full ? "": this.logInForm.controls['email'].value,
       'password': ''
     });
-    this.loading = false;
+    this.loading = false; //The request has stopped to load
   }
 }

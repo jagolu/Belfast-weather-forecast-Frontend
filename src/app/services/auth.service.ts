@@ -14,7 +14,9 @@ export class AuthService extends Rest {
     super(http);
   }
 
-  
+  /**
+   * To know if the user is logged or not
+   */
   public IsAuthenticated():Boolean{
     try{
       return this._identityS.getToken() != "" && this._identityS.getToken() != null;
@@ -23,16 +25,27 @@ export class AuthService extends Rest {
     }
   }
 
+  /**
+   * Logs the user out
+   */
   public logOut(){
     if(this.IsAuthenticated()){
       this._identityS.removeSession();
     }
   }
 
+  /**
+   * Signs the user up
+   * @param {SignUser} user The info of the user
+   */
   public signUp(user:SignUser){
     return this.postRequest(user, "Register");
   }
   
+  /**
+   * Logs the user int
+   * @param {LogInUser} user The info of the user
+   */
   public logIn(user:LogInUser){
     const body = new HttpParams()
     .set('grant_type', 'password')

@@ -10,39 +10,22 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 })
 export class RegisterComponent  {
 
-  public signUpForm: FormGroup;
-  public passwordType: string;
-  public passwordsAreEqual: Boolean;
-  public loading:Boolean;
+  public signUpForm: FormGroup; //Log in form
+  public passwordsAreEqual: Boolean; // To check if both passwords are the same
+  public loading:Boolean; //To know if the loading the log in post request
 
-
-  //
-  // ──────────────────────────────────────────────────────────────────────────
-  //   :::::: C O N S T R U C T O R S : :  :   :    :     :        :          :
-  // ──────────────────────────────────────────────────────────────────────────
-  //
-
-  /**
-   * @constructor
-   * @param {AuthenticationService} __authenticationS To do the
-   * sign up request 
-   */
   constructor(private _authS:AuthService) {
-    this.passwordsAreEqual = false;
-    this.loading = false;
+    this.passwordsAreEqual = false; // At the beginning the passwords aren't the same
+    this.loading = false; //At the beginning the passwords aren't the same
 
     this.initializeForm();
   }
 
-
-  //
-  // ──────────────────────────────────────────────────────────────────────────────────
-  //   :::::: P U B L I C   F U N C T I O N S : :  :   :    :     :        :          :
-  // ──────────────────────────────────────────────────────────────────────────────────
-  //
-
+  /**
+   * Do the signup request
+   */
   public signUp(){ 
-    this.loading = true;
+    this.loading = true; //Start to load the signup request
     this._authS.signUp({
       'email' : this.signUpForm.controls['email'].value,
       'password': this.signUpForm.controls['password'].value,
@@ -50,19 +33,24 @@ export class RegisterComponent  {
     }).subscribe(
       _=> {
         setTimeout(_=> this.resetForm(true), 1000);
-        window.location.href = BackendURL+"Home/LogIn";
+        window.location.href = BackendURL+"Home/LogIn"; //We navigate to the LogIn page
       },
       _=> this.resetForm(false)
     );
   }
 
+  /**
+   * Check if both password in the form are the same
+   */
   public equalPassword(){
     let password = this.signUpForm.controls['password'].value;
     let confirmPassword = this.signUpForm.controls['confirmPassword'].value;
     this.passwordsAreEqual = ((password == confirmPassword) && password.length>0 && confirmPassword.length>0);
   }
 
-
+  /**
+   * Initializes the form
+   */
   private initializeForm(){
     this.signUpForm = new FormGroup({
       'email': new FormControl(
@@ -93,13 +81,17 @@ export class RegisterComponent  {
     })
   }
 
+    /**
+   * Cleans the form
+   * @param {Boolean} full True to clean both inputs, false to remove only the password input
+   */
   private resetForm(full:Boolean){
     this.signUpForm.reset({
       'email': full ? "": this.signUpForm.controls['email'].value,
       'password': '',
       'confirmPassword': ''
     });
-    this.loading = false
+    this.loading = false; //The request has stopped to load
   }
 
 }
