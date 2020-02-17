@@ -13,10 +13,14 @@ export class RegisterComponent  {
   public signUpForm: FormGroup; //Log in form
   public passwordsAreEqual: Boolean; // To check if both passwords are the same
   public loading:Boolean; //To know if the loading the log in post request
+  public theresErrorMessage:Boolean; //To know if it was any error on the signup
+  public error_message:string; //The error message
 
   constructor(private _authS:AuthService) {
     this.passwordsAreEqual = false; // At the beginning the passwords aren't the same
     this.loading = false; //At the beginning the passwords aren't the same
+    this.theresErrorMessage = false;
+    this.error_message = "";
 
     this.initializeForm();
   }
@@ -35,7 +39,17 @@ export class RegisterComponent  {
         setTimeout(_=> this.resetForm(true), 1000);
         window.location.href = BackendURL+"Home/LogIn"; //We navigate to the LogIn page
       },
-      _=> this.resetForm(false)
+      err=> {
+        let message = ""; //Set all the error on just one message
+        err.error["modelState"][""].forEach(error_message => {
+          message += error_message;
+        });
+
+        this.error_message = message; //Set the error message
+        this.theresErrorMessage = true; //Show the message and hide it in 3 seconds
+        setTimeout(_=> this.theresErrorMessage = false, 3000);
+        this.resetForm(false);
+      }
     );
   }
 

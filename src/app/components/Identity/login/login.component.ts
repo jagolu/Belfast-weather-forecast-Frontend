@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { BackendURL } from 'src/environments/environment';
@@ -13,9 +13,13 @@ export class LoginComponent  {
 
   public logInForm: FormGroup; //Log in form
   public loading:Boolean; //To know if the loading the log in post request
+  public theresErrorMessage:Boolean; //To know if it was any error on the login
+  public error_message:string; //The error message
 
   constructor(private _authS:AuthService) {
     this.loading = false; //At the beginning the passwords aren't the same
+    this.theresErrorMessage = false;
+    this.error_message = "";
 
     this.initializeForm();
   }
@@ -33,7 +37,12 @@ export class LoginComponent  {
         setTimeout(_=> this.resetForm(true), 1000);
         window.location.href = BackendURL+"Home/WeatherForecast"; // We naviagte to the weather forecast page
       },
-      _=> this.resetForm(false)
+      err=> {
+        this.error_message = err.error["error_description"]; //Set the error message
+        this.theresErrorMessage = true; //Show the message and hide it in 3 seconds
+        setTimeout(_=> this.theresErrorMessage = false, 3000);
+        this.resetForm(false);
+      }
     );
   }
 

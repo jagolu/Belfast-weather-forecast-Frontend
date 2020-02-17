@@ -74,6 +74,11 @@
                                     </button>
                                 </div> 
                           </div>
+                          <div class="row justify-content-center mt-3" *ngIf="theresErrorMessage">
+                              <div class="col-12 text-center">
+                                    <p class="text-danger">{{error_message}}</p>
+                              </div>
+                          </div>
                     </form>
               </div>
         </div>
