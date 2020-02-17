@@ -26,10 +26,6 @@ export class WeatherForecastComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this._authS.IsAuthenticated());
-    if(!this._authS.IsAuthenticated()){
-      window.location.href = BackendURL+"Home/LogIn";
-    }
     this._wfS.getWeatherForecast(Locations.BELFAST.numberLocation).subscribe(data=>{
       this.weatherF = data;
     });

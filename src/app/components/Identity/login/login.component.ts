@@ -31,9 +31,6 @@ export class LoginComponent  {
   constructor(private _authS:AuthService) {
     this.passwordsAreEqual = false;
     this.loading = false;
-    if(this._authS.IsAuthenticated()){
-      this._authS.logOut();
-    }
 
     this.initializeForm();
   }

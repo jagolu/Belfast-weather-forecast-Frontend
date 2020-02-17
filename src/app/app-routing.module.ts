@@ -4,14 +4,14 @@ import { WeatherForecastComponent } from './components/weather-forecast/weather-
 import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuardService } from './services/auth-guard.service';
 
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'Home/Index2', component: WeatherForecastComponent },
-  { path: 'Home/SignUp', component: RegisterComponent},
-  { path: 'Home/LogIn', component: LoginComponent},
-  { path: 'Home/WeatherForecast', component: WeatherForecastComponent}
+  { path: '', component: LoginComponent, canActivate: [AuthGuardService]},
+  { path: 'Home/SignUp', component: RegisterComponent, canActivate: [AuthGuardService]},
+  { path: 'Home/LogIn', component: LoginComponent, canActivate: [AuthGuardService]},
+  { path: 'Home/WeatherForecast', component: WeatherForecastComponent, canActivate: [AuthGuardService]}
 ];
 
 

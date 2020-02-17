@@ -1,3 +1,4 @@
+import { AuthGuardService } from './services/auth-guard.service';
 import { IdentityService } from './services/identity.service';
 import {  HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FetchWeatherService } from './services/fetch-weather.service';
@@ -32,6 +33,7 @@ import { ResponseInterceptor } from './interceptors/response.interceptor';
   providers: [
     FetchWeatherService,
     IdentityService,
+    AuthGuardService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HeaderInterceptor,
@@ -41,7 +43,7 @@ import { ResponseInterceptor } from './interceptors/response.interceptor';
       provide: HTTP_INTERCEPTORS,
       useClass: ResponseInterceptor,
       multi: true
-    },
+    }
   ],
   bootstrap: [AppComponent]
 })
